@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom background grid */
+.bg-grid {
+	background-image: linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.02) 1px, transparent 1px);
+	background-size: 48px 48px, 48px 48px;
+}
+
+/* Neon shadow */
+.shadow-neon {
+	box-shadow: 0 8px 40px rgba(99,102,241,0.08), 0 0 64px rgba(99,102,241,0.06), inset 0 -6px 30px rgba(8,145,178,0.02);
+}
+
+/* subtle glass card */
+.glass {
+	background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+	border: 1px solid rgba(255,255,255,0.06);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+}
+
+/* Utility for larger blur */
+.blur-3xl {
+	filter: blur(60px);
+}
+
+/* make gradient texts smoother */
+.bg-clip-text {
+	background-clip: text;
+	-webkit-background-clip: text;
+}
+
+/* Glowing gradient utilities */
+.neon-gradient {
+	background: linear-gradient(90deg,#06b6d4 0%,#7c3aed 50%, #06b6d4 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+/* floating blob for hero/login background */
+.blob {
+	position: absolute;
+	width: 520px;
+	height: 520px;
+	filter: blur(80px);
+	opacity: 0.18;
+	background: radial-gradient(circle at 30% 30%, rgba(14,165,233,0.9), rgba(124,58,237,0.7) 40%, rgba(14,165,233,0.05) 70%);
+	transform: translate3d(0,0,0);
+	transition: transform 0.7s ease;
+}
+
+@media (max-width: 640px) {
+	.blob {
+		width: 360px;
+		height: 360px;
+		filter: blur(56px);
+	}
+}
+
+/* subtle input focus glow */
+.input-focus-glow:focus {
+	box-shadow: 0 6px 24px rgba(99,102,241,0.08), 0 0 18px rgba(14,165,233,0.08);
+}
+
+/* divider with OR */
+.divider-or {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	color: rgba(255,255,255,0.6);
+}
+.divider-or::before, .divider-or::after {
+	content: '';
+	flex: 1 1 auto;
+	height: 1px;
+	background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.06));
+}
+
+/* premium glow on hover */
+.hover-glow:hover {
+	box-shadow: 0 10px 60px rgba(124,58,237,0.10), 0 0 40px rgba(14,165,233,0.06);
+	transform: translateY(-4px) scale(1.01);
+}
+
+/* small utility for subtle text */
+.subtle { color: rgba(255,255,255,0.65); }

@@ -1,5 +1,5 @@
 import html2canvas from "html2canvas"
-import jsPDF from "jsPDF"
+import jsPDF from "jspdf"
 
 export const downloadResume = async () =>{
 

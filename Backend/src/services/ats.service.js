@@ -5,37 +5,20 @@ module.exports.analyzeResumeWithGemini = async(resume,jobDescription) =>{
     const prompt = `
 You are an expert ATS (Applicant Tracking System) Resume Analyzer.
 
-Compare the given resume with the job description.
+Analyze this resume against the job description.
 
-Analyze the following:
-
-1. ATS Score (0-100)
-2. Keyword Match Percentage
-3. Matched Keywords
-4. Missing Keywords
-5. Skills Analysis
-6. Experience Analysis
-7. Education Analysis
-8. Projects Analysis
-9. Resume Strengths
-10. Resume Weaknesses
-11. Suggestions to Improve ATS Score
-
-Return ONLY valid JSON.
-
-Example Format:
-
+Return ONLY valid JSON in this exact format:
 {
-  "atsScore": 85,
-  "keywordMatch": 80,
+  "atsScore": number,
+  "keywordMatch": number,
   "matchedKeywords": [],
   "missingKeywords": [],
-  "strengths": [],
-  "weaknesses": [],
   "skillsAnalysis": "",
   "experienceAnalysis": "",
   "educationAnalysis": "",
   "projectsAnalysis": "",
+  "strengths": [],
+  "weaknesses": [],
   "suggestions": []
 }
 
@@ -48,7 +31,7 @@ Job Description:
 ${jobDescription}
 `;
      const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.0-flash",
       contents: prompt,
     });
      const text = response.text;

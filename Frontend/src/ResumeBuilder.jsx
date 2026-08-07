@@ -22,6 +22,7 @@ function Tabs(){
   const [showExperience, setShowExperience] = useState(false)
   const [showEducation, setShowEducation] = useState(false)
   const [showProjects, setShowProjects] = useState(false)
+  const [loading,setLoading] = useState(false)
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -51,6 +52,7 @@ function Tabs(){
 
 
   const handleATSAnalysis = async () =>{
+    setLoading(true);
     try{
       const resumeDataForATS = {
   ...resumeData,
@@ -65,6 +67,8 @@ function Tabs(){
       navigate(`/ats-analysis/${id}`);
     }catch(error){
       console.error("Error during ATS analysis:", error);
+    }finally{
+      setLoading(false);
     }
   }
 
@@ -134,7 +138,7 @@ function Tabs(){
                 <h3 className="text-lg font-semibold text-white">ATS Optimization</h3>
               </div>
               <textarea value={jobDescription} onChange={(e) => setJobDescription(e.target.value)} placeholder="Paste the job description here to analyze ATS compatibility..." className="w-full rounded-lg border border-white/10 bg-[#070b1f] p-3 h-28 resize-none text-white placeholder:text-slate-400" />
-              <button onClick={handleATSAnalysis} className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl py-3 font-medium">Analyze ATS Score</button>
+              <button disabled={loading} onClick={handleATSAnalysis} className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl py-3 font-medium">{loading ? "Analyzing ATS..." : "Analyze ATS Score"}</button>
             </div>
           </div>
         )}

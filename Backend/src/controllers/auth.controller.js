@@ -2,7 +2,7 @@ const userModel = require("../models/user.model")
 const OTP = require("../models/otp.model")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const sendOTPEmail = require('../config/email');
+const {sendOTPEmail} = require("../../config/email")
 
 
 const generateOTP = () =>{

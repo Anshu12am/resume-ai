@@ -2,7 +2,7 @@ const userModel = require("../models/user.model")
 const OTP = require("../models/otp.model")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const { sendOTP } = require("../utils/sendMail")
+const sendOTPEmail = require('../config/email');
 
 
 const generateOTP = () =>{
@@ -58,7 +58,7 @@ module.exports.register = async (req, res) =>{
     expiresAt: new Date(Date.now() + 5 * 60 * 1000) 
   })
 
-  await sendOTP(email, otp)
+  await sendOTPEmail(user.email, otp);
 
   res.status(200).json({
     message:"OTP send to your email"
@@ -107,7 +107,7 @@ module.exports.login = async (req, res) => {
     expiresAt: Date.now() + 5 * 60 * 1000
   });
 
-  await sendOTP(email, otp);
+  await sendOTPEmail(user.email, otp);
   res.status(200).json({
     message: "OTP sent to your email"
   })

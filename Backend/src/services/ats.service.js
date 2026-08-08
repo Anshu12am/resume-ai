@@ -3,32 +3,25 @@ const ai = require( "./gemini.service.js");
 module.exports.analyzeResumeWithGemini = async(resume,jobDescription) =>{
   try{
     const prompt = `
-You are an expert ATS (Applicant Tracking System) Resume Analyzer.
-
 Analyze this resume against the job description.
 
-Return ONLY valid JSON in this exact format:
+Return ONLY valid JSON:
 {
-  "atsScore": number,
-  "keywordMatch": number,
+  "atsScore": 0,
+  "keywordMatch": 0,
   "matchedKeywords": [],
   "missingKeywords": [],
-  "skillsAnalysis": "",
-  "experienceAnalysis": "",
-  "educationAnalysis": "",
-  "projectsAnalysis": "",
   "strengths": [],
   "weaknesses": [],
   "suggestions": []
 }
 
 Resume:
-
-${JSON.stringify(resume, null, 2)}
+${JSON.stringify(resume)}
 
 Job Description:
-
 ${jobDescription}
+
 `;
      const response = await ai.models.generateContent({
       model: "gemini-2.0-flash",

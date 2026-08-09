@@ -1,11 +1,12 @@
-const ai = require( "./gemini.service.js");
+const groq = require('./groq.service.js');
 
-module.exports.buildCoverLetter = async({
+module.exports.buildCoverLetter = async ({
   jobRole,
   companyName,
   tone,
   resume
-}) =>{
+}) => {
+
   const prompt = `
 You are an expert HR recruiter and professional cover letter writer.
 
@@ -24,7 +25,6 @@ Candidate Resume:
 ${JSON.stringify(resume, null, 2) || 'No resume provided.'}
 
 Instructions:
-
 - Write the entire cover letter in a ${tone.toLowerCase()} tone.
 - Address the hiring manager professionally.
 - Explain why the candidate is interested in the role.
@@ -38,12 +38,17 @@ Instructions:
 - Return only the cover letter text.
 `;
 
+  const completion = await groq.chat.completions.create({
+    model: 'llama-3.1-8b-instant',
+    messages: [
+      {
+        role: 'user',
+        content: prompt
+      }
+    ],
+    temperature: 0.5,
+    max_tokens: 700
+  });
 
-const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
-      contents: prompt,
-    });
-
-   return response.candidates[0].content.parts[0].text;
-
-}
+  return completion.choices[0].message.content;
+};

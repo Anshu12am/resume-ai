@@ -14,7 +14,9 @@ import { initialResumeData,useResume } from './context/resumeContext.jsx'
 import { getResumeById } from './services/resume.api'
 import { downloadResume } from './utils/downloadResume.js'
 
+
 function Tabs(){
+
 
   const { resumeData, setResumeData, jobDescription, setJobDescription, setAnalysis, setResumeId } = useResume();
 
@@ -26,11 +28,22 @@ function Tabs(){
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const STORAGE_KEY = 'resume_builder_data';
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(resumeData));
+  },[resumeData]);
+
   useEffect(() => {
     if(!id){
       setResumeId(null);
       setAnalysis(null);
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if(saved){
+        setResumeData(JSON.parse(saved));
+      }else{
       setResumeData(initialResumeData);
+      }
       return;
     }
 

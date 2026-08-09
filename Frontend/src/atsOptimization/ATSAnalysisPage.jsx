@@ -94,7 +94,7 @@ const ATSAnalysisPage = () => {
           <div className="flex justify-start">
             <button className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-medium text-white transition hover:bg-white/10">
               
-              <button onClick={()=>navigate(-1)}>Back</button>
+              <button onClick={()=>navigate('/resume-builder')}>Back</button>
             </button>
           </div>
           <div className="mx-auto inline-flex items-center justify-center rounded-full bg-white/3 px-4 py-1 text-sm font-medium text-cyan-300">AI Powered Analysis</div>

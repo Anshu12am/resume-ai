@@ -53,6 +53,10 @@ export const useAuth = () =>{
     setLoading(true)
     try{
       await logout()
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
       setUser(null)
       return true
     }catch(error){

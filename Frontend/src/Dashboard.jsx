@@ -13,6 +13,7 @@ import {
 export default function Dashboard(){
 
   const [resumes, setResumes] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [coverLetters, setCoverLetters] = useState([]);
   const [activeTab, setActiveTab] = useState('resume');
 
@@ -23,7 +24,7 @@ export default function Dashboard(){
   resumes.length > 0
     ? Math.round(
         resumes.reduce(
-          (sum, resume) => sum + (resume.atsAnalysis?.overallScore || 0),
+          (sum, resume) => sum + (resume.atsAnalysis?.atsScore || 0),
           0
         ) / resumes.length
       )
@@ -31,28 +32,24 @@ export default function Dashboard(){
   
 
   useEffect(()=>{
-     const fetchResumes = async () => {
+     const fetchData = async () => {
+      setLoading(true);
     try{
-      const response = await getAllResumes();
-      setResumes(response.data);
+      const [resumeRes,letterRes] = await Promise.all([
+        getAllResumes(),
+        getAllCoverLetters()
+      ]);
+      setResumes(resumeRes.data);
+      setCoverLetters(letterRes.data);
     }catch(error){
-      console.error("Error fetching resumes:", error);
+      console.error("Error fetching data:", error);
+    }finally{
+      setLoading(false);
     }
   };
-  fetchResumes();
+  fetchData();
   },[]);
 
-  useEffect(()=>{
-      const fetchLetters = async () =>{
-        try{
-          const response = await getAllCoverLetters();
-          setCoverLetters(response.data);
-        }catch(error){
-          console.error(error)
-        }
-      };
-      fetchLetters()
-    },[])
 
   const handleDeleteResume = (id) => {
     setResumes((prev)=> prev.filter((resume) => resume._id !== id));
@@ -82,53 +79,70 @@ export default function Dashboard(){
           </section>
 
           <section>
-            <div className="mb-4 flex items-center justify-start">
-              <div className="inline-flex items-center rounded-full border border-white/10 bg-slate-950/70 p-1 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur-sm">
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('resume')}
-                  className={`rounded-full px-3 py-1.5 text-sm font-semibold transition-all ${activeTab === 'resume' ? 'bg-white text-slate-900' : 'text-slate-300'}`}
-                >
-                  Resume
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('coverLetter')}
-                  className={`ml-1 rounded-full px-3 py-1.5 text-sm font-semibold transition-all ${activeTab === 'coverLetter' ? 'bg-white text-slate-900' : 'text-slate-300'}`}
-                >
-                  Cover letter
-                </button>
-              </div>
-            </div>
+  {loading ? (
+    <div className="rounded-xl border border-white/10 bg-slate-950/60 p-10 text-center text-slate-400">
+      <p>Loading your dashboard...</p>
+    </div>
+  ) : (
+    <>
+      <div className="mb-4 flex items-center justify-start">
+        <div className="inline-flex items-center rounded-full border border-white/10 bg-slate-950/70 p-1 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur-sm">
+          <button
+            type="button"
+            onClick={() => setActiveTab('resume')}
+            className={`rounded-full px-3 py-1.5 text-sm font-semibold transition-all ${activeTab === 'resume' ? 'bg-white text-slate-900' : 'text-slate-300'}`}
+          >
+            Resume
+          </button>
 
-            {activeTab === 'resume' && (
-              resumes.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {resumes.map((resume) => (
-                    <ResumeCard key={resume._id} resume={resume} onDelete={handleDeleteResume} />
-                  ))}
-                </div>
-              ) : (
-                <div className="rounded-xl border border-white/10 bg-slate-950/60 p-10 text-center text-slate-400">
-                  <h3 className="text-lg font-semibold text-white">Resume unavailable</h3>
-                </div>
-              )
-            )}
+          <button
+            type="button"
+            onClick={() => setActiveTab('coverLetter')}
+            className={`ml-1 rounded-full px-3 py-1.5 text-sm font-semibold transition-all ${activeTab === 'coverLetter' ? 'bg-white text-slate-900' : 'text-slate-300'}`}
+          >
+            Cover letter
+          </button>
+        </div>
+      </div>
 
-            {activeTab === 'coverLetter' && (
-              coverLetters.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {coverLetters.map((coverLetter) => (
-                    <CoverLetterCard key={coverLetter._id} coverLetter={coverLetter} onDelete={handleDeleteCoverLetter} />
-                  ))}
-                </div>
-              ) : (
-                <div className="rounded-xl border border-white/10 bg-slate-950/60 p-10 text-center text-slate-400">
-                  <h3 className="text-lg font-semibold text-white">Cover letter unavailable</h3>
-                </div>
-              )
-            )}
-          </section>
+      {activeTab === 'resume' && (
+        resumes.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {resumes.map((resume) => (
+              <ResumeCard
+                key={resume._id}
+                resume={resume}
+                onDelete={handleDeleteResume}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-xl border border-white/10 bg-slate-950/60 p-10 text-center text-slate-400">
+            <h3 className="text-lg font-semibold text-white">Resume unavailable</h3>
+          </div>
+        )
+      )}
+
+      {activeTab === 'coverLetter' && (
+        coverLetters.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {coverLetters.map((coverLetter) => (
+              <CoverLetterCard
+                key={coverLetter._id}
+                coverLetter={coverLetter}
+                onDelete={handleDeleteCoverLetter}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-xl border border-white/10 bg-slate-950/60 p-10 text-center text-slate-400">
+            <h3 className="text-lg font-semibold text-white">Cover letter unavailable</h3>
+          </div>
+        )
+      )}
+    </>
+  )}
+</section>
         </div>
       </main>
     </div>

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: 'https://resume-ai-api-z9af.onrender.com',
-  timeout: 10000,
+  timeout: 40000,
 })
 
 api.interceptors.request.use((config) => {

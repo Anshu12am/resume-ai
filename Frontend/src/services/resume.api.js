@@ -2,8 +2,18 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: 'https://resume-ai-api-z9af.onrender.com',
-  
+  timeout: 40000,
 })
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
 
 export async function createResume({resumeData, title, atsAnalysis}) {
   try {

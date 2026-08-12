@@ -38,6 +38,8 @@ export const useAuth = () =>{
     setLoading(true)
     try{
       const data = await verifyOTP({ email, otp })
+      
+      localStorage.setItem("token", data.token);
       setUser(data.user)
       return true
     }catch(error){

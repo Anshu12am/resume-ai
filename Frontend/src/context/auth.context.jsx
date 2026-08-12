@@ -6,23 +6,41 @@ export const AuthContext = createContext()
 export const AuthProvider = ({children}) =>{
 
   const [user, setUser] = useState(null);
-  const [loading,setLoading] = useState(false);
+  const [loading,setLoading] = useState(()=>{
+    const token = localStorage.getItem('token');
+    return !!token;
+  });
 
-  useEffect(()=>{
+  useEffect(() => {
 
-    const fetchUser = async ()=>{
-      try{
-        const data = await getMe()
-        setUser(data?.user || null)
-      }catch(error){
-        setUser(null)
-        console.error("Error fetching user data:", error)
-      }finally{
-        setLoading(false)
-      }
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      return;
     }
-    fetchUser()
-  },[])
+
+    const fetchUser = async () => {
+      try {
+        const data = await getMe();
+        setUser(data?.user || null);
+
+      } catch (error) {
+
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+
+        setUser(null);
+
+        console.error('Error fetching user data:', error);
+
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+
+  }, []);
 
 
 

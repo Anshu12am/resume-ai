@@ -10,8 +10,7 @@ app.use(cors({
   origin: [
     'http://localhost:5173',
     'https://resume-ai-beta-two.vercel.app'
-  ],
-  credentials: true
+  ]
 }));
 
 const authRoutes = require('./routes/auth.routes');

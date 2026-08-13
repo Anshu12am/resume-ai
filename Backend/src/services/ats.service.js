@@ -39,5 +39,8 @@ ${jobDescription}
     .replace(/```/g, '')
     .trim();
 
+
+console.log('CLEANED RESPONSE =>', cleaned);
+
   return JSON.parse(cleaned);
 };

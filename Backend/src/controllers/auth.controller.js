@@ -107,11 +107,14 @@ module.exports.login = async (req, res) => {
     expiresAt: Date.now() + 5 * 60 * 1000
   });
 
+  console.log("LOGIN: OTP generated:", otp);
   await sendOTPEmail(user.email, otp);
+  console.log("LOGIN: OTP email sent");
+  console.log("LOGIN: ABOUT TO SEND RESPONSE");
   res.status(200).json({
     message: "OTP sent to your email"
   })
-
+console.log("LOGIN: RESPONSE SENT");
 
 }
 

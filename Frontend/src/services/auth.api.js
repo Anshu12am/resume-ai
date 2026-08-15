@@ -32,9 +32,12 @@ catch(error){
 export async function login({email, password}){
 
   try{
+    console.log("LOGIN API: request sending");
     const response = await api.post('/api/auth/login',{
       email, password
     });
+
+    console.log("LOGIN API: response received", response.data);
     return response.data;
   }catch(error){
   console.error("Error logging in user:", error);
